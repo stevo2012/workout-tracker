@@ -76,6 +76,7 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
 .btn-primary { background: var(--blue); color: #fff; border-color: var(--blue); }
 .btn-primary:active { background: #0062cc; }
 .btn-danger { background: var(--red-bg); color: var(--red-text); border-color: transparent; }
+.btn-danger:active { opacity: 0.8; }
 .timer-card { background: var(--bg2); border-radius: var(--radius); padding: 16px; margin-bottom: 12px; }
 .timer-display { font-size: 48px; font-weight: 700; text-align: center; color: var(--text); letter-spacing: -1px; margin: 8px 0; font-variant-numeric: tabular-nums; }
 .timer-display.running { color: var(--blue); }
@@ -85,14 +86,17 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
 .preset-btn.active-preset { border-color: var(--blue); color: var(--blue); }
 .history-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 0.5px solid var(--border); }
 .history-item:last-child { border-bottom: none; }
-.history-left { display: flex; align-items: center; gap: 10px; }
+.history-left { display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0; }
 .badge { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 8px; font-size: 13px; font-weight: 700; flex-shrink: 0; }
 .badge-a { background: var(--blue-bg); color: var(--blue-text); }
 .badge-b { background: var(--red-bg); color: var(--red-text); }
 .badge-c { background: var(--green-bg); color: var(--green-text); }
 .history-date { font-size: 14px; color: var(--text); font-weight: 500; }
 .history-meta { font-size: 12px; color: var(--text2); margin-top: 1px; }
-.history-right { font-size: 14px; font-weight: 600; color: var(--text2); }
+.history-actions { display: flex; gap: 6px; flex-shrink: 0; }
+.icon-btn { padding: 6px 10px; font-size: 13px; font-weight: 600; border: 1.5px solid var(--border); border-radius: var(--radius-sm); background: var(--bg); color: var(--text2); cursor: pointer; -webkit-appearance: none; }
+.icon-btn.del { color: var(--red-text); border-color: transparent; background: var(--red-bg); }
+.icon-btn:active { opacity: 0.7; }
 .empty { text-align: center; padding: 32px 16px; color: var(--text2); font-size: 15px; }
 .complete-wrap { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 32px; }
 .complete-icon { width: 72px; height: 72px; border-radius: 50%; background: var(--green-bg); display: flex; align-items: center; justify-content: center; font-size: 36px; margin-bottom: 16px; }
@@ -115,7 +119,7 @@ select { width: 100%; padding: 10px 12px; font-size: 15px; border: 1.5px solid v
 .workout-header { padding: 16px; padding-top: max(16px, env(safe-area-inset-top)); background: var(--bg); border-bottom: 0.5px solid var(--border); flex-shrink: 0; }
 .workout-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
 .back-btn { font-size: 16px; color: var(--blue); background: none; border: none; padding: 0; cursor: pointer; }
-/* backlog modal */
+/* modals */
 .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: flex; align-items: flex-end; z-index: 100; }
 .modal-sheet { background: var(--bg); border-radius: 20px 20px 0 0; padding: 20px; width: 100%; padding-bottom: max(24px, env(safe-area-inset-bottom)); max-height: 88vh; overflow-y: auto; }
 .modal-handle { width: 36px; height: 4px; background: var(--bg3); border-radius: 2px; margin: 0 auto 20px; }
@@ -131,6 +135,16 @@ select { width: 100%; padding: 10px 12px; font-size: 15px; border: 1.5px solid v
 .day-sel-btn.sel-c { background: var(--green-bg); color: var(--green-text); border-color: #27ae60; }
 .backlog-note { font-size: 13px; color: var(--text2); line-height: 1.5; margin-top: 4px; }
 .backlog-tag { font-size: 11px; color: var(--text2); font-style: italic; }
+.confirm-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 200; padding: 24px; }
+.confirm-box { background: var(--bg); border-radius: var(--radius); padding: 24px; width: 100%; max-width: 320px; text-align: center; }
+.confirm-title { font-size: 17px; font-weight: 700; color: var(--text); margin-bottom: 8px; }
+.confirm-msg { font-size: 14px; color: var(--text2); line-height: 1.5; margin-bottom: 20px; }
+.confirm-btns { display: flex; gap: 10px; }
+/* edit session sets */
+.edit-ex-block { margin-bottom: 18px; padding-bottom: 18px; border-bottom: 0.5px solid var(--border); }
+.edit-ex-block:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+.edit-ex-name { font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 10px; }
+.edit-sets-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
 </style>
 </head>
 <body>
@@ -165,7 +179,7 @@ select { width: 100%; padding: 10px 12px; font-size: 15px; border: 1.5px solid v
         <div class="day-info"><div class="day-title">Day C — Core & Shoulders</div><div class="day-sub">Core · Stability · Shoulders · 8 exercises</div></div>
         <div class="chevron">›</div>
       </button>
-      <button class="day-btn" onclick="openBacklog()" style="border:1.5px dashed var(--border2);background:transparent;margin-top:4px;">
+      <button class="day-btn" onclick="openBacklog(null)" style="border:1.5px dashed var(--border2);background:transparent;margin-top:4px;">
         <div class="day-dot" style="background:var(--bg3);color:var(--text2);font-size:26px;font-weight:300;">+</div>
         <div class="day-info"><div class="day-title" style="color:var(--text2);">Log a past session</div><div class="day-sub">Backfill a workout you already did</div></div>
       </button>
@@ -246,9 +260,7 @@ select { width: 100%; padding: 10px 12px; font-size: 15px; border: 1.5px solid v
       </div>
       <div class="card">
         <div class="card-title">Track exercise weight</div>
-        <select id="prog-select" onchange="renderChart()">
-          <option value="">Select exercise...</option>
-        </select>
+        <select id="prog-select" onchange="renderChart()"><option value="">Select exercise...</option></select>
         <div id="chart-area"></div>
       </div>
       <div class="card">
@@ -262,11 +274,11 @@ select { width: 100%; padding: 10px 12px; font-size: 15px; border: 1.5px solid v
     </div>
   </div>
 
-  <!-- BACKLOG MODAL -->
+  <!-- BACKLOG / EDIT MODAL -->
   <div class="modal-overlay" id="backlog-modal" style="display:none;" onclick="closeBacklogIfOutside(event)">
     <div class="modal-sheet" id="backlog-sheet">
       <div class="modal-handle"></div>
-      <div class="modal-title">Log a past session</div>
+      <div class="modal-title" id="backlog-modal-title">Log a past session</div>
       <div class="form-row">
         <label class="form-label">Date</label>
         <input class="form-input" type="date" id="backlog-date">
@@ -287,10 +299,27 @@ select { width: 100%; padding: 10px 12px; font-size: 15px; border: 1.5px solid v
         <label class="form-label">Sets completed <span style="font-weight:400;text-transform:none;">(approx)</span></label>
         <input class="form-input" type="number" id="backlog-sets" placeholder="e.g. 18" inputmode="numeric">
       </div>
-      <p class="backlog-note">This logs the session to your history and streak. You can always do a full session today to record exact weights.</p>
+      <!-- Detailed exercise weights (shown when editing a full session) -->
+      <div id="edit-exercises-section" style="display:none;">
+        <div class="form-label" style="margin-bottom:12px;">Exercise weights &amp; reps</div>
+        <div id="edit-exercises-list"></div>
+      </div>
+      <p class="backlog-note" id="backlog-note-text">This logs the session to your history and streak.</p>
       <div class="nav-btns" style="margin-top:20px;">
         <button class="btn" onclick="closeBacklog()">Cancel</button>
-        <button class="btn btn-primary" onclick="saveBacklog()">Save session</button>
+        <button class="btn btn-primary" id="backlog-save-btn" onclick="saveBacklog()">Save session</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- DELETE CONFIRM -->
+  <div class="confirm-overlay" id="confirm-modal" style="display:none;">
+    <div class="confirm-box">
+      <div class="confirm-title">Delete session?</div>
+      <div class="confirm-msg">This will permanently remove this workout from your history. This cannot be undone.</div>
+      <div class="confirm-btns">
+        <button class="btn" onclick="closeConfirm()">Cancel</button>
+        <button class="btn btn-danger" onclick="confirmDelete()">Delete</button>
       </div>
     </div>
   </div>
@@ -335,7 +364,6 @@ const WORKOUTS = {
   }
 };
 
-// Pre-seed with the two sessions already completed — only on first load
 let sessions = JSON.parse(localStorage.getItem('wt_sessions') || 'null');
 if (!sessions) {
   const today = new Date();
@@ -371,7 +399,7 @@ let state = {
   currentDay: null, currentExIdx: 0, sessionData: {}, sessionStart: null,
   workoutTimerInterval: null, timerInterval: null,
   timerSeconds: 120, timerTarget: 120, timerRunning: false,
-  backlogDay: null,
+  backlogDay: null, editingIdx: null, pendingDeleteIdx: null,
 };
 
 function save() { localStorage.setItem('wt_sessions', JSON.stringify(sessions)); }
@@ -410,20 +438,21 @@ function renderWeekStrip() {
 function renderRecent() {
   const el = document.getElementById('recent-list');
   if (!sessions.length) { el.innerHTML = '<div class="empty">No sessions yet</div>'; return; }
-  el.innerHTML = sessions.slice(0, 6).map(s => {
+  el.innerHTML = sessions.slice(0, 6).map((s, i) => {
     const d = new Date(s.date);
     const label = d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
     const tag = s.backlog ? ' <span class="backlog-tag">(backlogged)</span>' : '';
-    return '<div class="history-item"><div class="history-left"><div class="badge badge-' + s.day.toLowerCase() + '">' + s.day + '</div><div><div class="history-date">' + label + tag + '</div><div class="history-meta">' + WORKOUTS[s.day].label.split('—')[1].trim() + '</div></div></div><div class="history-right">' + (s.duration || '?') + 'm · ' + (s.sets || '?') + ' sets</div></div>';
+    return '<div class="history-item"><div class="history-left"><div class="badge badge-' + s.day.toLowerCase() + '">' + s.day + '</div><div><div class="history-date">' + label + tag + '</div><div class="history-meta">' + (s.duration||'?') + 'm · ' + (s.sets||'?') + ' sets</div></div></div><div class="history-actions"><button class="icon-btn" onclick="openEdit(' + i + ')">Edit</button><button class="icon-btn del" onclick="openConfirmDelete(' + i + ')">Del</button></div></div>';
   }).join('');
 }
 
+// ── WORKOUT ──
 function startDay(day) {
   state.currentDay = day; state.currentExIdx = 0; state.sessionData = {}; state.sessionStart = Date.now();
   clearInterval(state.workoutTimerInterval);
   state.workoutTimerInterval = setInterval(() => {
     const e = Math.floor((Date.now() - state.sessionStart) / 1000);
-    document.getElementById('workout-timer-top').textContent = Math.floor(e/60) + ':' + (e%60 < 10 ? '0' : '') + e%60;
+    document.getElementById('workout-timer-top').textContent = Math.floor(e/60) + ':' + (e%60<10?'0':'') + e%60;
   }, 1000);
   document.getElementById('workout-label').textContent = WORKOUTS[day].label;
   renderExercise();
@@ -447,7 +476,7 @@ function renderExercise() {
   let html = '';
   for (let s = 0; s < ex.sets; s++) {
     const d = saved['s'+s] || {};
-    html += '<div class="set-col"><div class="set-label">Set ' + (s+1) + '</div><input class="set-input" type="number" inputmode="decimal" step="2.5" placeholder="lbs" value="' + (d.w !== undefined ? d.w : (ex.startWeight || '')) + '" id="w' + s + '"><input class="set-input" type="number" inputmode="numeric" placeholder="reps" value="' + (d.r || '') + '" id="r' + s + '"><button class="set-done-btn ' + (d.done ? 'done' : '') + '" id="db' + s + '" onclick="logSet(' + s + ')">' + (d.done ? '✓' : 'Log') + '</button></div>';
+    html += '<div class="set-col"><div class="set-label">Set '+(s+1)+'</div><input class="set-input" type="number" inputmode="decimal" step="2.5" placeholder="lbs" value="'+(d.w!==undefined?d.w:(ex.startWeight||''))+'" id="w'+s+'"><input class="set-input" type="number" inputmode="numeric" placeholder="reps" value="'+(d.r||'')+'" id="r'+s+'"><button class="set-done-btn '+(d.done?'done':'')+'" id="db'+s+'" onclick="logSet('+s+')">'+(d.done?'✓':'Log')+'</button></div>';
   }
   document.getElementById('sets-row').innerHTML = html;
   document.getElementById('workout-scroll').scrollTo({ top: 0, behavior: 'smooth' });
@@ -458,7 +487,7 @@ function saveCurrentEx() {
   if (!state.sessionData[ex.name]) state.sessionData[ex.name] = {};
   for (let s = 0; s < ex.sets; s++) {
     const w = document.getElementById('w'+s)?.value; const r = document.getElementById('r'+s)?.value; const done = document.getElementById('db'+s)?.classList.contains('done');
-    if (w || r) state.sessionData[ex.name]['s'+s] = { w: w ? parseFloat(w) : '', r: r ? parseInt(r) : '', done: done || false };
+    if (w || r) state.sessionData[ex.name]['s'+s] = { w: w?parseFloat(w):'', r: r?parseInt(r):'', done: done||false };
   }
 }
 
@@ -467,7 +496,7 @@ function logSet(s) {
   if (!state.sessionData[ex.name]) state.sessionData[ex.name] = {};
   const w = document.getElementById('w'+s).value; const r = document.getElementById('r'+s).value;
   const btn = document.getElementById('db'+s); const done = !btn.classList.contains('done');
-  state.sessionData[ex.name]['s'+s] = { w: w ? parseFloat(w) : '', r: r ? parseInt(r) : '', done };
+  state.sessionData[ex.name]['s'+s] = { w: w?parseFloat(w):'', r: r?parseInt(r):'', done };
   btn.classList.toggle('done', done); btn.textContent = done ? '✓' : 'Log';
   if (done) { resetTimer(); startTimer(); }
 }
@@ -477,7 +506,6 @@ function nextEx() {
   if (state.currentExIdx < WORKOUTS[state.currentDay].exercises.length-1) { state.currentExIdx++; renderExercise(); }
   else { finishWorkout(); }
 }
-
 function prevEx() { if (state.currentExIdx > 0) { saveCurrentEx(); state.currentExIdx--; renderExercise(); } }
 
 function exitWorkout() {
@@ -491,38 +519,35 @@ function finishWorkout() {
   for (const exData of Object.values(state.sessionData)) {
     for (const set of Object.values(exData)) { if (set.done) { totalSets++; if (set.w) { weightSum += set.w; weightN++; } } }
   }
-  const session = { day, date: new Date().toISOString(), duration, sets: totalSets, avgWeight: weightN ? Math.round(weightSum/weightN) : 0, backlog: false, exercises: state.sessionData };
+  const session = { day, date: new Date().toISOString(), duration, sets: totalSets, avgWeight: weightN?Math.round(weightSum/weightN):0, backlog: false, exercises: state.sessionData };
   sessions.unshift(session); save();
   document.getElementById('complete-label').textContent = WORKOUTS[day].label;
   document.getElementById('complete-stats').innerHTML =
-    '<div class="stat-card"><div class="stat-label">Duration</div><div class="stat-val">' + duration + '<span class="stat-unit"> min</span></div></div>' +
-    '<div class="stat-card"><div class="stat-label">Sets logged</div><div class="stat-val">' + totalSets + '</div></div>' +
-    '<div class="stat-card"><div class="stat-label">Avg weight</div><div class="stat-val">' + (weightN ? Math.round(weightSum/weightN) : '-') + '<span class="stat-unit">' + (weightN ? ' lbs' : '') + '</span></div></div>' +
-    '<div class="stat-card"><div class="stat-label">Session</div><div class="stat-val">Day ' + day + '</div></div>';
+    '<div class="stat-card"><div class="stat-label">Duration</div><div class="stat-val">'+duration+'<span class="stat-unit"> min</span></div></div>'+
+    '<div class="stat-card"><div class="stat-label">Sets logged</div><div class="stat-val">'+totalSets+'</div></div>'+
+    '<div class="stat-card"><div class="stat-label">Avg weight</div><div class="stat-val">'+(weightN?Math.round(weightSum/weightN):'-')+'<span class="stat-unit">'+(weightN?' lbs':'')+'</span></div></div>'+
+    '<div class="stat-card"><div class="stat-label">Session</div><div class="stat-val">Day '+day+'</div></div>';
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById('screen-complete').classList.add('active');
 }
 
 function finishAndGoHome() { showTab('home'); }
-
 function toggleCue() {
   const box = document.getElementById('cue-box'); const btn = document.getElementById('cue-btn');
   const open = box.classList.toggle('open'); btn.textContent = open ? 'Hide form cues' : 'Show form cues';
 }
 
+// ── TIMER ──
 function setPreset(sec, el) {
   document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active-preset'));
   el.classList.add('active-preset'); state.timerTarget = sec; resetTimer();
 }
-
 function resetTimer() {
   clearInterval(state.timerInterval); state.timerRunning = false; state.timerSeconds = state.timerTarget;
   const disp = document.getElementById('timer-disp');
   if (disp) { disp.textContent = formatTime(state.timerSeconds); disp.className = 'timer-display'; }
-  const btn = document.getElementById('timer-start-btn');
-  if (btn) btn.textContent = 'Start';
+  const btn = document.getElementById('timer-start-btn'); if (btn) btn.textContent = 'Start';
 }
-
 function startTimer() {
   if (state.timerRunning) return;
   state.timerRunning = true;
@@ -530,33 +555,68 @@ function startTimer() {
   state.timerInterval = setInterval(() => {
     state.timerSeconds--;
     const disp = document.getElementById('timer-disp');
-    if (disp) { disp.textContent = formatTime(state.timerSeconds); disp.className = 'timer-display' + (state.timerSeconds <= 0 ? ' done' : ' running'); }
+    if (disp) { disp.textContent = formatTime(state.timerSeconds); disp.className = 'timer-display'+(state.timerSeconds<=0?' done':' running'); }
     if (state.timerSeconds <= 0) { clearInterval(state.timerInterval); state.timerRunning = false; if (btn) btn.textContent = 'Start'; state.timerSeconds = state.timerTarget; }
   }, 1000);
 }
-
 function toggleTimer() { if (state.timerRunning) { resetTimer(); } else { startTimer(); } }
-function formatTime(s) { const a = Math.abs(s); return Math.floor(a/60) + ':' + (a%60 < 10 ? '0' : '') + a%60; }
+function formatTime(s) { const a = Math.abs(s); return Math.floor(a/60)+':'+(a%60<10?'0':'')+a%60; }
 
-// BACKLOG
-function openBacklog() {
-  state.backlogDay = null;
-  const today = new Date().toISOString().split('T')[0];
-  document.getElementById('backlog-date').value = today;
-  document.getElementById('backlog-duration').value = '';
-  document.getElementById('backlog-sets').value = '';
+// ── BACKLOG (new session) ──
+function openBacklog(editIdx) {
+  state.editingIdx = editIdx;
+  const isEdit = editIdx !== null && editIdx !== undefined;
+  const s = isEdit ? sessions[editIdx] : null;
+
+  document.getElementById('backlog-modal-title').textContent = isEdit ? 'Edit session' : 'Log a past session';
+  document.getElementById('backlog-save-btn').textContent = isEdit ? 'Save changes' : 'Save session';
+  document.getElementById('backlog-note-text').style.display = isEdit ? 'none' : 'block';
+
+  const dateVal = isEdit ? new Date(s.date).toISOString().split('T')[0] : new Date().toISOString().split('T')[0];
+  document.getElementById('backlog-date').value = dateVal;
+  document.getElementById('backlog-duration').value = isEdit ? (s.duration||'') : '';
+  document.getElementById('backlog-sets').value = isEdit ? (s.sets||'') : '';
+
+  state.backlogDay = isEdit ? s.day : null;
   ['a','b','c'].forEach(d => document.getElementById('bl-'+d).className = 'day-sel-btn');
+  if (isEdit && s.day) document.getElementById('bl-'+s.day.toLowerCase()).className = 'day-sel-btn sel-'+s.day.toLowerCase();
+
+  // show editable exercise details for full (non-backlog) sessions
+  const exSection = document.getElementById('edit-exercises-section');
+  const exList = document.getElementById('edit-exercises-list');
+  if (isEdit && s.exercises && Object.keys(s.exercises).length > 0) {
+    exSection.style.display = 'block';
+    let html = '';
+    const dayExercises = WORKOUTS[s.day] ? WORKOUTS[s.day].exercises : [];
+    const exNames = Object.keys(s.exercises);
+    exNames.forEach(exName => {
+      const exData = s.exercises[exName];
+      const setKeys = Object.keys(exData).sort();
+      html += '<div class="edit-ex-block"><div class="edit-ex-name">' + exName + '</div><div class="edit-sets-grid">';
+      setKeys.forEach((k, si) => {
+        const setD = exData[k];
+        html += '<div class="set-col"><div class="set-label">Set '+(si+1)+'</div><input class="set-input" type="number" inputmode="decimal" step="2.5" placeholder="lbs" value="'+(setD.w||'')+'" id="edit-w-'+exName.replace(/\s/g,'_')+'-'+si+'"><input class="set-input" type="number" inputmode="numeric" placeholder="reps" value="'+(setD.r||'')+'" id="edit-r-'+exName.replace(/\s/g,'_')+'-'+si+'"></div>';
+      });
+      html += '</div></div>';
+    });
+    exList.innerHTML = html;
+  } else {
+    exSection.style.display = 'none';
+    exList.innerHTML = '';
+  }
+
   document.getElementById('backlog-modal').style.display = 'flex';
 }
 
-function closeBacklog() { document.getElementById('backlog-modal').style.display = 'none'; }
+function openEdit(idx) { openBacklog(idx); }
 
+function closeBacklog() { document.getElementById('backlog-modal').style.display = 'none'; }
 function closeBacklogIfOutside(e) { if (e.target === document.getElementById('backlog-modal')) closeBacklog(); }
 
 function selectBacklogDay(day) {
   state.backlogDay = day;
   ['a','b','c'].forEach(d => document.getElementById('bl-'+d).className = 'day-sel-btn');
-  document.getElementById('bl-'+day.toLowerCase()).className = 'day-sel-btn sel-' + day.toLowerCase();
+  document.getElementById('bl-'+day.toLowerCase()).className = 'day-sel-btn sel-'+day.toLowerCase();
 }
 
 function saveBacklog() {
@@ -565,31 +625,79 @@ function saveBacklog() {
   const sets = parseInt(document.getElementById('backlog-sets').value) || 0;
   if (!dateVal) { alert('Please select a date.'); return; }
   if (!state.backlogDay) { alert('Please select a workout day (A, B, or C).'); return; }
-  const session = { day: state.backlogDay, date: new Date(dateVal + 'T12:00:00').toISOString(), duration, sets, avgWeight: 0, backlog: true, exercises: {} };
-  sessions.unshift(session);
+
+  const isEdit = state.editingIdx !== null && state.editingIdx !== undefined;
+
+  if (isEdit) {
+    const s = sessions[state.editingIdx];
+    s.date = new Date(dateVal + 'T12:00:00').toISOString();
+    s.day = state.backlogDay;
+    s.duration = duration;
+    s.sets = sets;
+    // save edited weights if present
+    if (s.exercises && Object.keys(s.exercises).length > 0) {
+      Object.keys(s.exercises).forEach(exName => {
+        const exData = s.exercises[exName];
+        const setKeys = Object.keys(exData).sort();
+        setKeys.forEach((k, si) => {
+          const wEl = document.getElementById('edit-w-'+exName.replace(/\s/g,'_')+'-'+si);
+          const rEl = document.getElementById('edit-r-'+exName.replace(/\s/g,'_')+'-'+si);
+          if (wEl) exData[k].w = wEl.value ? parseFloat(wEl.value) : '';
+          if (rEl) exData[k].r = rEl.value ? parseInt(rEl.value) : '';
+        });
+      });
+      // recalc avgWeight
+      let wSum = 0, wN = 0;
+      for (const exData of Object.values(s.exercises)) {
+        for (const set of Object.values(exData)) { if (set.w) { wSum += set.w; wN++; } }
+      }
+      s.avgWeight = wN ? Math.round(wSum/wN) : 0;
+    }
+  } else {
+    const session = { day: state.backlogDay, date: new Date(dateVal+'T12:00:00').toISOString(), duration, sets, avgWeight: 0, backlog: true, exercises: {} };
+    sessions.unshift(session);
+  }
+
   sessions.sort((a, b) => new Date(b.date) - new Date(a.date));
   save(); closeBacklog(); renderHome();
 }
 
+// ── DELETE ──
+function openConfirmDelete(idx) {
+  state.pendingDeleteIdx = idx;
+  document.getElementById('confirm-modal').style.display = 'flex';
+}
+function closeConfirm() {
+  state.pendingDeleteIdx = null;
+  document.getElementById('confirm-modal').style.display = 'none';
+}
+function confirmDelete() {
+  if (state.pendingDeleteIdx !== null) {
+    sessions.splice(state.pendingDeleteIdx, 1);
+    save(); closeConfirm(); renderHome();
+  }
+}
+
+// ── PROGRESS ──
 function renderProgress() {
   document.getElementById('p-sessions').textContent = sessions.length;
   const weekAgo = Date.now() - 7*86400000;
   document.getElementById('p-week').textContent = sessions.filter(s => new Date(s.date) > weekAgo).length;
-  document.getElementById('p-sets').textContent = sessions.reduce((a,s) => a + (s.sets||0), 0);
+  document.getElementById('p-sets').textContent = sessions.reduce((a,s) => a+(s.sets||0), 0);
   const goal = new Date(); goal.setMonth(goal.getMonth()+4);
   document.getElementById('p-days').textContent = Math.max(0, Math.round((goal-Date.now())/86400000));
   const sel = document.getElementById('prog-select');
   if (sel.options.length <= 1) {
     const all = [...WORKOUTS.A.exercises, ...WORKOUTS.B.exercises, ...WORKOUTS.C.exercises];
     const seen = new Set();
-    all.forEach(e => { if (!seen.has(e.name)) { seen.add(e.name); const o = document.createElement('option'); o.value = e.name; o.textContent = e.name.charAt(0).toUpperCase() + e.name.slice(1); sel.appendChild(o); }});
+    all.forEach(e => { if (!seen.has(e.name)) { seen.add(e.name); const o = document.createElement('option'); o.value = e.name; o.textContent = e.name.charAt(0).toUpperCase()+e.name.slice(1); sel.appendChild(o); }});
   }
   const hist = document.getElementById('history-list');
   if (!sessions.length) { hist.innerHTML = '<div class="empty">No sessions logged yet</div>'; return; }
-  hist.innerHTML = sessions.slice(0,20).map(s => {
+  hist.innerHTML = sessions.slice(0,20).map((s, i) => {
     const d = new Date(s.date);
     const tag = s.backlog ? ' <span class="backlog-tag">(backlogged)</span>' : '';
-    return '<div class="history-item"><div class="history-left"><div class="badge badge-' + s.day.toLowerCase() + '">' + s.day + '</div><div><div class="history-date">' + d.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'}) + tag + '</div><div class="history-meta">' + (s.duration||'?') + ' min · ' + (s.sets||'?') + ' sets logged</div></div></div></div>';
+    return '<div class="history-item"><div class="history-left"><div class="badge badge-'+s.day.toLowerCase()+'">'+s.day+'</div><div><div class="history-date">'+d.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'})+tag+'</div><div class="history-meta">'+(s.duration||'?')+' min · '+(s.sets||'?')+' sets</div></div></div><div class="history-actions"><button class="icon-btn" onclick="openEdit('+i+')">Edit</button><button class="icon-btn del" onclick="openConfirmDelete('+i+')">Del</button></div></div>';
   }).join('');
   renderChart();
 }
@@ -610,10 +718,10 @@ function renderChart() {
   const max = Math.max(...points.map(p=>p.w)); const min = Math.min(...points.map(p=>p.w)); const range = max-min||1;
   const bars = points.map(p => {
     const h = Math.max(8, Math.round(((p.w-min)/range)*64+8));
-    return '<div style="flex:1;display:flex;flex-direction:column;align-items:center;"><div style="font-size:10px;color:var(--blue-text);margin-bottom:3px;">' + p.w + '</div><div style="width:100%;height:' + h + 'px;background:var(--blue);border-radius:4px 4px 0 0;"></div><div style="font-size:10px;color:var(--text2);margin-top:4px;">' + p.date.toLocaleDateString('en-US',{month:'numeric',day:'numeric'}) + '</div></div>';
+    return '<div style="flex:1;display:flex;flex-direction:column;align-items:center;"><div style="font-size:10px;color:var(--blue-text);margin-bottom:3px;">'+p.w+'</div><div style="width:100%;height:'+h+'px;background:var(--blue);border-radius:4px 4px 0 0;"></div><div style="font-size:10px;color:var(--text2);margin-top:4px;">'+p.date.toLocaleDateString('en-US',{month:'numeric',day:'numeric'})+'</div></div>';
   }).join('');
   const delta = points.length > 1 ? points[points.length-1].w - points[0].w : 0;
-  el.innerHTML = '<div style="display:flex;align-items:flex-end;gap:6px;height:90px;">' + bars + '</div><div style="margin-top:10px;font-size:14px;color:var(--text);">Current: <strong>' + points[points.length-1].w + ' lbs</strong>' + (delta !== 0 ? ' · ' + (delta>0?'+':'') + delta + ' lbs from first session' : '') + '</div>';
+  el.innerHTML = '<div style="display:flex;align-items:flex-end;gap:6px;height:90px;">'+bars+'</div><div style="margin-top:10px;font-size:14px;color:var(--text);">Current: <strong>'+points[points.length-1].w+' lbs</strong>'+(delta!==0?' · '+(delta>0?'+':'')+delta+' lbs from first session':'')+'</div>';
 }
 
 renderHome();
