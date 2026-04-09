@@ -9,33 +9,31 @@
 <meta name="theme-color" content="#ffffff">
 <title>Workout Tracker</title>
 <style>
-* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-:root {
-  --bg:#ffffff; --bg2:#f5f5f7; --bg3:#ebebed;
-  --text:#1a1a1a; --text2:#6e6e73; --text3:#aeaeb2;
-  --border:rgba(0,0,0,0.12); --border2:rgba(0,0,0,0.2);
-  --blue:#007AFF; --blue-bg:#E8F0FE; --blue-text:#0C47A1;
-  --red-bg:#FEECEC; --red-text:#8B1A1A;
-  --green-bg:#EAF5E9; --green-text:#1A5C1A;
-  --amber-bg:#FFF8E7; --amber-text:#7A5200;
-  --radius:12px; --radius-sm:8px;
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+:root{
+  --bg:#ffffff;--bg2:#f5f5f7;--bg3:#ebebed;
+  --text:#1a1a1a;--text2:#6e6e73;--text3:#aeaeb2;
+  --border:rgba(0,0,0,0.12);--border2:rgba(0,0,0,0.2);
+  --blue:#007AFF;--blue-bg:#E8F0FE;--blue-text:#0C47A1;
+  --red-bg:#FEECEC;--red-text:#8B1A1A;
+  --green-bg:#EAF5E9;--green-text:#1A5C1A;
+  --radius:12px;--radius-sm:8px;
 }
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg:#1c1c1e; --bg2:#2c2c2e; --bg3:#3a3a3c;
-    --text:#f2f2f7; --text2:#aeaeb2; --text3:#636366;
-    --border:rgba(255,255,255,0.12); --border2:rgba(255,255,255,0.2);
-    --blue-bg:#0a2a5e; --blue-text:#90b8f8;
-    --red-bg:#3a0a0a; --red-text:#f8a0a0;
-    --green-bg:#0a2a0a; --green-text:#90d890;
-    --amber-bg:#2a1f00; --amber-text:#f0c060;
+@media(prefers-color-scheme:dark){
+  :root{
+    --bg:#1c1c1e;--bg2:#2c2c2e;--bg3:#3a3a3c;
+    --text:#f2f2f7;--text2:#aeaeb2;--text3:#636366;
+    --border:rgba(255,255,255,0.12);--border2:rgba(255,255,255,0.2);
+    --blue-bg:#0a2a5e;--blue-text:#90b8f8;
+    --red-bg:#3a0a0a;--red-text:#f8a0a0;
+    --green-bg:#0a2a0a;--green-text:#90d890;
   }
 }
 html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text',sans-serif;}
 .app{height:100vh;height:100dvh;display:flex;flex-direction:column;overflow:hidden;}
 .screen{display:none;flex-direction:column;height:100%;overflow:hidden;}
 .screen.active{display:flex;}
-.scroll-area{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:16px;padding-bottom:32px;}
+.scroll-area{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:16px;padding-bottom:40px;}
 .nav-bar{padding:16px 16px 12px;background:var(--bg);border-bottom:0.5px solid var(--border);flex-shrink:0;padding-top:max(16px,env(safe-area-inset-top));}
 .nav-title{font-size:28px;font-weight:700;color:var(--text);letter-spacing:-0.5px;}
 .nav-sub{font-size:13px;color:var(--text2);margin-top:2px;}
@@ -65,13 +63,18 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
 .cue-btn{font-size:14px;color:var(--blue);background:none;border:none;padding:0;cursor:pointer;margin-bottom:10px;display:block;}
 .cue-box{font-size:14px;color:var(--text2);line-height:1.6;background:var(--bg3);border-radius:var(--radius-sm);padding:12px;margin-bottom:12px;display:none;}
 .cue-box.open{display:block;}
-.sets-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px;}
-.set-col{display:flex;flex-direction:column;gap:5px;}
-.set-label{font-size:11px;color:var(--text2);text-align:center;font-weight:500;}
-.set-input{width:100%;padding:8px 4px;text-align:center;font-size:15px;font-weight:500;border:1.5px solid var(--border);border-radius:var(--radius-sm);background:var(--bg);color:var(--text);-webkit-appearance:none;}
+/* live workout sets — vertical list */
+.set-row-item{display:grid;grid-template-columns:32px 1fr 1fr 64px 36px;gap:8px;align-items:center;margin-bottom:8px;}
+.set-num{font-size:12px;font-weight:600;color:var(--text2);text-align:center;}
+.set-input{width:100%;padding:10px 6px;text-align:center;font-size:15px;font-weight:500;border:1.5px solid var(--border);border-radius:var(--radius-sm);background:var(--bg);color:var(--text);-webkit-appearance:none;}
 .set-input:focus{outline:none;border-color:var(--blue);}
-.set-done-btn{width:100%;padding:8px 4px;text-align:center;font-size:12px;font-weight:600;border:1.5px solid var(--border);border-radius:var(--radius-sm);background:var(--bg);color:var(--text2);cursor:pointer;-webkit-appearance:none;transition:all 0.15s;}
+.set-done-btn{width:100%;padding:10px 4px;text-align:center;font-size:12px;font-weight:600;border:1.5px solid var(--border);border-radius:var(--radius-sm);background:var(--bg);color:var(--text2);cursor:pointer;-webkit-appearance:none;transition:all 0.15s;}
 .set-done-btn.done{background:var(--green-bg);color:var(--green-text);border-color:transparent;}
+.set-del-btn{width:36px;height:36px;border-radius:var(--radius-sm);border:none;background:transparent;color:var(--text3);cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;-webkit-appearance:none;flex-shrink:0;}
+.set-del-btn:active{color:var(--red-text);}
+.set-col-headers{display:grid;grid-template-columns:32px 1fr 1fr 64px 36px;gap:8px;margin-bottom:6px;}
+.set-col-label{font-size:11px;color:var(--text2);text-align:center;font-weight:500;}
+.add-set-btn{width:100%;padding:10px;border:1.5px dashed var(--border2);border-radius:var(--radius-sm);background:transparent;color:var(--blue);font-size:14px;font-weight:600;cursor:pointer;margin-top:4px;margin-bottom:14px;}
 .nav-btns{display:flex;gap:10px;margin-top:4px;}
 .btn{flex:1;padding:14px;border:1.5px solid var(--border);border-radius:var(--radius-sm);background:var(--bg);color:var(--text);font-size:16px;font-weight:600;cursor:pointer;text-align:center;-webkit-appearance:none;}
 .btn:active{transform:scale(0.97);background:var(--bg3);}
@@ -97,8 +100,7 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
 .history-meta{font-size:12px;color:var(--text2);margin-top:1px;}
 .history-note{font-size:12px;color:var(--text2);margin-top:4px;font-style:italic;line-height:1.4;}
 .history-actions{display:flex;gap:6px;flex-shrink:0;margin-left:8px;}
-.icon-btn{padding:6px 10px;font-size:13px;font-weight:600;border:1.5px solid var(--border);border-radius:var(--radius-sm);background:var(--bg);color:var(--text2);cursor:pointer;-webkit-appearance:none;}
-.icon-btn.del{color:var(--red-text);border-color:transparent;background:var(--red-bg);}
+.icon-btn{padding:6px 12px;font-size:13px;font-weight:600;border:1.5px solid var(--border);border-radius:var(--radius-sm);background:var(--bg);color:var(--text2);cursor:pointer;-webkit-appearance:none;}
 .icon-btn:active{opacity:0.7;}
 .empty{text-align:center;padding:32px 16px;color:var(--text2);font-size:15px;}
 .complete-wrap{flex:1;display:flex;flex-direction:column;padding:24px;overflow-y:auto;}
@@ -122,7 +124,6 @@ select{width:100%;padding:10px 12px;font-size:15px;border:1.5px solid var(--bord
 .workout-header{padding:16px;padding-top:max(16px,env(safe-area-inset-top));background:var(--bg);border-bottom:0.5px solid var(--border);flex-shrink:0;}
 .workout-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
 .back-btn{font-size:16px;color:var(--blue);background:none;border:none;padding:0;cursor:pointer;}
-/* feel rating */
 .feel-row{display:flex;gap:8px;margin-top:6px;}
 .feel-btn{flex:1;padding:10px 4px;font-size:18px;border:1.5px solid var(--border);border-radius:var(--radius-sm);background:var(--bg2);cursor:pointer;text-align:center;-webkit-appearance:none;transition:all 0.15s;}
 .feel-btn.selected{border-width:2px;transform:scale(1.08);}
@@ -135,7 +136,7 @@ select{width:100%;padding:10px 12px;font-size:15px;border:1.5px solid var(--bord
 .feel-tag{font-size:12px;margin-right:4px;}
 /* modals */
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);display:flex;align-items:flex-end;z-index:100;}
-.modal-sheet{background:var(--bg);border-radius:20px 20px 0 0;padding:20px;width:100%;padding-bottom:max(24px,env(safe-area-inset-bottom));max-height:88vh;overflow-y:auto;}
+.modal-sheet{background:var(--bg);border-radius:20px 20px 0 0;padding:20px;width:100%;padding-bottom:max(24px,env(safe-area-inset-bottom));max-height:92vh;overflow-y:auto;}
 .modal-handle{width:36px;height:4px;background:var(--bg3);border-radius:2px;margin:0 auto 20px;}
 .modal-title{font-size:20px;font-weight:700;color:var(--text);margin-bottom:18px;letter-spacing:-0.3px;}
 .form-row{margin-bottom:16px;}
@@ -150,15 +151,23 @@ textarea.form-input{resize:none;line-height:1.5;font-family:inherit;}
 .day-sel-btn.sel-c{background:var(--green-bg);color:var(--green-text);border-color:#27ae60;}
 .backlog-note{font-size:13px;color:var(--text2);line-height:1.5;margin-top:4px;}
 .backlog-tag{font-size:11px;color:var(--text2);font-style:italic;}
+/* backlog exercise sets */
+.bl-ex-block{margin-bottom:16px;padding-bottom:16px;border-bottom:0.5px solid var(--border);}
+.bl-ex-block:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0;}
+.bl-ex-name{font-size:15px;font-weight:700;color:var(--text);margin-bottom:10px;}
+.bl-set-row{display:grid;grid-template-columns:28px 1fr 1fr 32px;gap:6px;align-items:center;margin-bottom:6px;}
+.bl-set-num{font-size:11px;color:var(--text2);text-align:center;font-weight:600;}
+.bl-set-del{width:32px;height:32px;border:none;background:transparent;color:var(--text3);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;border-radius:var(--radius-sm);}
+.bl-set-del:active{color:var(--red-text);}
+.bl-add-set{font-size:13px;color:var(--blue);background:none;border:none;padding:4px 0;cursor:pointer;font-weight:600;margin-top:2px;}
+/* confirm */
 .confirm-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:200;padding:24px;}
 .confirm-box{background:var(--bg);border-radius:var(--radius);padding:24px;width:100%;max-width:320px;text-align:center;}
 .confirm-title{font-size:17px;font-weight:700;color:var(--text);margin-bottom:8px;}
 .confirm-msg{font-size:14px;color:var(--text2);line-height:1.5;margin-bottom:20px;}
 .confirm-btns{display:flex;gap:10px;}
-.edit-ex-block{margin-bottom:18px;padding-bottom:18px;border-bottom:0.5px solid var(--border);}
-.edit-ex-block:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0;}
-.edit-ex-name{font-size:15px;font-weight:700;color:var(--text);margin-bottom:10px;}
-.edit-sets-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;}
+.danger-zone{margin-top:24px;padding-top:20px;border-top:0.5px solid var(--border);}
+.danger-zone-label{font-size:12px;color:var(--text2);text-align:center;margin-bottom:10px;text-transform:uppercase;letter-spacing:0.3px;}
 </style>
 </head>
 <body>
@@ -222,7 +231,15 @@ textarea.form-input{resize:none;line-height:1.5;font-family:inherit;}
         <div class="ex-target" id="ex-target"></div>
         <button class="cue-btn" id="cue-btn" onclick="toggleCue()">Show form cues</button>
         <div class="cue-box" id="cue-box"></div>
-        <div class="sets-row" id="sets-row"></div>
+        <div class="set-col-headers">
+          <div class="set-col-label">#</div>
+          <div class="set-col-label">Weight (lbs)</div>
+          <div class="set-col-label">Reps</div>
+          <div class="set-col-label">Done</div>
+          <div class="set-col-label"></div>
+        </div>
+        <div id="sets-list"></div>
+        <button class="add-set-btn" onclick="addLiveSet()">+ Add set</button>
         <div class="nav-btns">
           <button class="btn" onclick="prevEx()" id="btn-prev">Prev</button>
           <button class="btn btn-primary" onclick="nextEx()" id="btn-next">Next</button>
@@ -252,40 +269,20 @@ textarea.form-input{resize:none;line-height:1.5;font-family:inherit;}
       <div class="complete-title">Session done!</div>
       <div class="complete-sub" id="complete-label"></div>
       <div class="stat-grid" id="complete-stats" style="width:100%;margin-bottom:20px;"></div>
-
-      <!-- How did it go -->
       <div style="width:100%;margin-bottom:20px;">
         <div class="form-label" style="margin-bottom:10px;">How did it go? <span style="font-weight:400;text-transform:none;font-size:12px;color:var(--text2);">(optional)</span></div>
         <div class="feel-row" id="feel-row">
-          <div style="flex:1;text-align:center;">
-            <button class="feel-btn f1" onclick="selectFeel(1)" title="Rough">😓</button>
-            <div class="feel-label">Rough</div>
-          </div>
-          <div style="flex:1;text-align:center;">
-            <button class="feel-btn f2" onclick="selectFeel(2)" title="Okay">😐</button>
-            <div class="feel-label">Okay</div>
-          </div>
-          <div style="flex:1;text-align:center;">
-            <button class="feel-btn f3" onclick="selectFeel(3)" title="Good">🙂</button>
-            <div class="feel-label">Good</div>
-          </div>
-          <div style="flex:1;text-align:center;">
-            <button class="feel-btn f4" onclick="selectFeel(4)" title="Great">😄</button>
-            <div class="feel-label">Great</div>
-          </div>
-          <div style="flex:1;text-align:center;">
-            <button class="feel-btn f5" onclick="selectFeel(5)" title="Crushed it">🔥</button>
-            <div class="feel-label">Crushed it</div>
-          </div>
+          <div style="flex:1;text-align:center;"><button class="feel-btn f1" onclick="selectFeel(1)">😓</button><div class="feel-label">Rough</div></div>
+          <div style="flex:1;text-align:center;"><button class="feel-btn f2" onclick="selectFeel(2)">😐</button><div class="feel-label">Okay</div></div>
+          <div style="flex:1;text-align:center;"><button class="feel-btn f3" onclick="selectFeel(3)">🙂</button><div class="feel-label">Good</div></div>
+          <div style="flex:1;text-align:center;"><button class="feel-btn f4" onclick="selectFeel(4)">😄</button><div class="feel-label">Great</div></div>
+          <div style="flex:1;text-align:center;"><button class="feel-btn f5" onclick="selectFeel(5)">🔥</button><div class="feel-label">Crushed it</div></div>
         </div>
       </div>
-
-      <!-- Notes -->
       <div style="width:100%;margin-bottom:20px;">
         <div class="form-label" style="margin-bottom:8px;">Notes <span style="font-weight:400;text-transform:none;font-size:12px;color:var(--text2);">(optional)</span></div>
         <textarea class="form-input" id="complete-notes" rows="3" placeholder="Anything to remember about this session..."></textarea>
       </div>
-
       <button class="btn btn-primary" style="width:100%;padding:16px;font-size:17px;" onclick="finishAndGoHome()">Save & finish</button>
     </div>
   </div>
@@ -341,11 +338,6 @@ textarea.form-input{resize:none;line-height:1.5;font-family:inherit;}
         <input class="form-input" type="number" id="backlog-duration" placeholder="e.g. 55" inputmode="numeric">
       </div>
       <div class="form-row">
-        <label class="form-label">Sets completed <span style="font-weight:400;text-transform:none;">(approx)</span></label>
-        <input class="form-input" type="number" id="backlog-sets" placeholder="e.g. 18" inputmode="numeric">
-      </div>
-      <!-- Feel rating in edit/backlog -->
-      <div class="form-row">
         <label class="form-label">How did it go? <span style="font-weight:400;text-transform:none;font-size:11px;">(optional)</span></label>
         <div class="feel-row" id="backlog-feel-row">
           <div style="flex:1;text-align:center;"><button class="feel-btn f1" onclick="selectBacklogFeel(1)">😓</button><div class="feel-label">Rough</div></div>
@@ -355,19 +347,23 @@ textarea.form-input{resize:none;line-height:1.5;font-family:inherit;}
           <div style="flex:1;text-align:center;"><button class="feel-btn f5" onclick="selectBacklogFeel(5)">🔥</button><div class="feel-label">Crushed it</div></div>
         </div>
       </div>
-      <!-- Notes in edit/backlog -->
       <div class="form-row">
         <label class="form-label">Notes <span style="font-weight:400;text-transform:none;font-size:11px;">(optional)</span></label>
-        <textarea class="form-input" id="backlog-notes" rows="3" placeholder="Anything to remember about this session..."></textarea>
+        <textarea class="form-input" id="backlog-notes" rows="3" placeholder="Anything to remember..."></textarea>
       </div>
-      <div id="edit-exercises-section" style="display:none;">
-        <div class="form-label" style="margin-bottom:12px;">Exercise weights &amp; reps</div>
-        <div id="edit-exercises-list"></div>
+      <!-- Exercise sets section — shown after day is selected -->
+      <div id="backlog-exercises-wrap" style="display:none;">
+        <div class="form-label" style="margin-bottom:12px;">Sets & weights</div>
+        <div id="backlog-exercises-list"></div>
       </div>
-      <p class="backlog-note" id="backlog-note-text">This logs the session to your history and streak.</p>
       <div class="nav-btns" style="margin-top:20px;">
         <button class="btn" onclick="closeBacklog()">Cancel</button>
         <button class="btn btn-primary" id="backlog-save-btn" onclick="saveBacklog()">Save session</button>
+      </div>
+      <!-- Delete danger zone — only shown when editing -->
+      <div class="danger-zone" id="delete-zone" style="display:none;">
+        <div class="danger-zone-label">Danger zone</div>
+        <button class="btn btn-danger" style="width:100%;" onclick="openConfirmDelete(state.editingIdx)">Delete this workout</button>
       </div>
     </div>
   </div>
@@ -375,21 +371,21 @@ textarea.form-input{resize:none;line-height:1.5;font-family:inherit;}
   <!-- DELETE CONFIRM -->
   <div class="confirm-overlay" id="confirm-modal" style="display:none;">
     <div class="confirm-box">
-      <div class="confirm-title">Delete session?</div>
-      <div class="confirm-msg">This will permanently remove this workout from your history and cannot be undone.</div>
+      <div class="confirm-title">Delete workout?</div>
+      <div class="confirm-msg">Are you sure you want to delete this workout? This cannot be undone.</div>
       <div class="confirm-btns">
         <button class="btn" onclick="closeConfirm()">Cancel</button>
-        <button class="btn btn-danger" onclick="confirmDelete()">Delete</button>
+        <button class="btn btn-danger" onclick="confirmDelete()">Yes, delete</button>
       </div>
     </div>
   </div>
 
 </div>
 <script>
-const FEEL_EMOJI = ['','😓','😐','🙂','😄','🔥'];
-const FEEL_LABELS = ['','Rough','Okay','Good','Great','Crushed it'];
+const FEEL_EMOJI=['','😓','😐','🙂','😄','🔥'];
+const FEEL_LABELS=['','Rough','Okay','Good','Great','Crushed it'];
 
-const WORKOUTS = {
+const WORKOUTS={
   A:{label:'Day A — Push',exercises:[
     {name:'Barbell bench press',target:'4 sets x 6-8 reps',sets:4,startWeight:95,cue:'Control the descent 2-3 seconds down. Bar to lower chest, elbows at 45 degrees. Drive through the whole foot. Shoulder blades pinched back throughout.'},
     {name:'Overhead press (DB)',target:'3 sets x 8-10 reps',sets:3,startWeight:25,cue:'Dumbbells at shoulder height, palms forward. Press straight up with a slight inward arc at the top. Brace your core the entire time. No lower back arch.'},
@@ -418,12 +414,12 @@ const WORKOUTS = {
   ]}
 };
 
-let sessions = JSON.parse(localStorage.getItem('wt_sessions') || 'null');
-if (!sessions) {
-  const today = new Date();
-  const d1 = new Date(today); d1.setDate(today.getDate()-1);
-  const d2 = new Date(today); d2.setDate(today.getDate()-3);
-  sessions = [
+let sessions=JSON.parse(localStorage.getItem('wt_sessions')||'null');
+if(!sessions){
+  const today=new Date();
+  const d1=new Date(today);d1.setDate(today.getDate()-1);
+  const d2=new Date(today);d2.setDate(today.getDate()-3);
+  sessions=[
     {day:'B',date:d1.toISOString(),duration:55,sets:18,avgWeight:30,backlog:true,feel:4,notes:'',
      exercises:{'Barbell row':{s0:{w:95,r:7,done:true},s1:{w:95,r:6,done:true},s2:{w:95,r:6,done:true},s3:{w:95,r:6,done:true}},'Single-arm dumbbell row':{s0:{w:42.5,r:10,done:true},s1:{w:42.5,r:10,done:true},s2:{w:42.5,r:9,done:true}},'Dumbbell curl':{s0:{w:17.5,r:10,done:true},s1:{w:17.5,r:10,done:true},s2:{w:17.5,r:9,done:true}},'Hammer curl':{s0:{w:17.5,r:12,done:true},s1:{w:17.5,r:11,done:true}},'Face pulls':{s0:{w:22.5,r:15,done:true},s1:{w:22.5,r:15,done:true},s2:{w:22.5,r:15,done:true}}}},
     {day:'A',date:d2.toISOString(),duration:50,sets:20,avgWeight:38,backlog:true,feel:5,notes:'First session back, felt strong.',
@@ -432,10 +428,15 @@ if (!sessions) {
   save();
 }
 
-let state = {
+// backlog exercise sets state (array per exercise: [{w,r},...])
+let blSets={};
+
+let state={
   currentDay:null,currentExIdx:0,sessionData:{},sessionStart:null,
   workoutTimerInterval:null,timerInterval:null,
   timerSeconds:120,timerTarget:120,timerRunning:false,
+  // live workout dynamic sets per exercise name
+  liveSets:{},
   completeFeel:null,
   backlogDay:null,backlogFeel:null,editingIdx:null,pendingDeleteIdx:null,
 };
@@ -468,10 +469,7 @@ function renderWeekStrip(){
   document.getElementById('week-strip-wrap').innerHTML=html+'</div>';
 }
 
-function feelTag(s){
-  if(!s.feel)return'';
-  return'<span class="feel-tag" title="'+FEEL_LABELS[s.feel]+'">'+FEEL_EMOJI[s.feel]+'</span>';
-}
+function feelTag(s){return s.feel?'<span class="feel-tag" title="'+FEEL_LABELS[s.feel]+'">'+FEEL_EMOJI[s.feel]+'</span>':'';}
 
 function renderRecent(){
   const el=document.getElementById('recent-list');
@@ -481,13 +479,13 @@ function renderRecent(){
     const label=d.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'});
     const tag=s.backlog?' <span class="backlog-tag">(backlogged)</span>':'';
     const note=s.notes?'<div class="history-note">'+s.notes+'</div>':'';
-    return '<div class="history-item"><div class="history-left"><div class="badge badge-'+s.day.toLowerCase()+'">'+s.day+'</div><div style="flex:1;min-width:0;"><div class="history-date">'+feelTag(s)+label+tag+'</div><div class="history-meta">'+(s.duration||'?')+'m · '+(s.sets||'?')+' sets</div>'+note+'</div></div><div class="history-actions"><button class="icon-btn" onclick="openEdit('+i+')">Edit</button><button class="icon-btn del" onclick="openConfirmDelete('+i+')">Del</button></div></div>';
+    return '<div class="history-item"><div class="history-left"><div class="badge badge-'+s.day.toLowerCase()+'">'+s.day+'</div><div style="flex:1;min-width:0;"><div class="history-date">'+feelTag(s)+label+tag+'</div><div class="history-meta">'+(s.duration||'?')+'m · '+(s.sets||'?')+' sets</div>'+note+'</div></div><div class="history-actions"><button class="icon-btn" onclick="openEdit('+i+')">Edit</button></div></div>';
   }).join('');
 }
 
-// WORKOUT
+// ── LIVE WORKOUT ──
 function startDay(day){
-  state.currentDay=day;state.currentExIdx=0;state.sessionData={};state.sessionStart=Date.now();state.completeFeel=null;
+  state.currentDay=day;state.currentExIdx=0;state.sessionData={};state.sessionStart=Date.now();state.completeFeel=null;state.liveSets={};
   clearInterval(state.workoutTimerInterval);
   state.workoutTimerInterval=setInterval(()=>{
     const e=Math.floor((Date.now()-state.sessionStart)/1000);
@@ -498,6 +496,16 @@ function startDay(day){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById('screen-workout').classList.add('active');
   resetTimer();
+}
+
+function getLastSessionWeights(day,exName){
+  // find most recent session of same day with this exercise
+  for(const s of sessions){
+    if(s.day===day&&s.exercises&&s.exercises[exName]){
+      return s.exercises[exName];
+    }
+  }
+  return null;
 }
 
 function renderExercise(){
@@ -511,33 +519,69 @@ function renderExercise(){
   document.getElementById('workout-progress').style.width=((idx/total)*100)+'%';
   document.getElementById('btn-prev').style.opacity=idx===0?'0.35':'1';
   document.getElementById('btn-next').textContent=idx===total-1?'Finish workout':'Next exercise';
-  const saved=state.sessionData[ex.name]||{};
-  let html='';
-  for(let s=0;s<ex.sets;s++){
-    const d=saved['s'+s]||{};
-    html+='<div class="set-col"><div class="set-label">Set '+(s+1)+'</div><input class="set-input" type="number" inputmode="decimal" step="2.5" placeholder="lbs" value="'+(d.w!==undefined?d.w:(ex.startWeight||''))+'" id="w'+s+'"><input class="set-input" type="number" inputmode="numeric" placeholder="reps" value="'+(d.r||'')+'" id="r'+s+'"><button class="set-done-btn '+(d.done?'done':'')+'" id="db'+s+'" onclick="logSet('+s+')">'+(d.done?'✓':'Log')+'</button></div>';
+  // init live sets if not already stored
+  if(!state.liveSets[ex.name]){
+    const saved=state.sessionData[ex.name];
+    const lastWeights=getLastSessionWeights(state.currentDay,ex.name);
+    const arr=[];
+    for(let s=0;s<ex.sets;s++){
+      const d=saved?saved['s'+s]:null;
+      const lw=lastWeights?lastWeights['s'+s]:null;
+      arr.push({w:d?d.w:(lw?lw.w:(ex.startWeight||'')),r:d?d.r:(lw?lw.r:''),done:d?d.done:false});
+    }
+    state.liveSets[ex.name]=arr;
   }
-  document.getElementById('sets-row').innerHTML=html;
+  renderLiveSets(ex.name);
   document.getElementById('workout-scroll').scrollTo({top:0,behavior:'smooth'});
+}
+
+function renderLiveSets(exName){
+  const arr=state.liveSets[exName]||[];
+  let html='';
+  arr.forEach((s,i)=>{
+    html+='<div class="set-row-item" id="set-item-'+i+'">'+
+      '<div class="set-num">'+(i+1)+'</div>'+
+      '<input class="set-input" type="number" inputmode="decimal" step="2.5" placeholder="lbs" value="'+(s.w!==''?s.w:'')+'" onchange="updateLiveSet(\''+exName+'\','+i+',\'w\',this.value)">'+
+      '<input class="set-input" type="number" inputmode="numeric" placeholder="reps" value="'+(s.r!==''?s.r:'')+'" onchange="updateLiveSet(\''+exName+'\','+i+',\'r\',this.value)">'+
+      '<button class="set-done-btn '+(s.done?'done':'')+'" onclick="toggleLiveSetDone(\''+exName+'\','+i+')">'+(s.done?'✓':'Log')+'</button>'+
+      '<button class="set-del-btn" onclick="deleteLiveSet(\''+exName+'\','+i+')" title="Remove set">×</button>'+
+    '</div>';
+  });
+  document.getElementById('sets-list').innerHTML=html;
+}
+
+function updateLiveSet(exName,idx,field,val){
+  if(!state.liveSets[exName])return;
+  state.liveSets[exName][idx][field]=val===''?'': (field==='w'?parseFloat(val):parseInt(val));
+}
+
+function toggleLiveSetDone(exName,idx){
+  const s=state.liveSets[exName][idx];
+  s.done=!s.done;
+  renderLiveSets(exName);
+  if(s.done){resetTimer();startTimer();}
+}
+
+function deleteLiveSet(exName,idx){
+  if(state.liveSets[exName].length<=1){alert('You need at least one set.');return;}
+  state.liveSets[exName].splice(idx,1);
+  renderLiveSets(exName);
+}
+
+function addLiveSet(){
+  const ex=WORKOUTS[state.currentDay].exercises[state.currentExIdx];
+  const arr=state.liveSets[ex.name];
+  const last=arr[arr.length-1];
+  arr.push({w:last?last.w:'',r:'',done:false});
+  renderLiveSets(ex.name);
 }
 
 function saveCurrentEx(){
   const ex=WORKOUTS[state.currentDay].exercises[state.currentExIdx];
-  if(!state.sessionData[ex.name])state.sessionData[ex.name]={};
-  for(let s=0;s<ex.sets;s++){
-    const w=document.getElementById('w'+s)?.value;const r=document.getElementById('r'+s)?.value;const done=document.getElementById('db'+s)?.classList.contains('done');
-    if(w||r)state.sessionData[ex.name]['s'+s]={w:w?parseFloat(w):'',r:r?parseInt(r):'',done:done||false};
-  }
-}
-
-function logSet(s){
-  const ex=WORKOUTS[state.currentDay].exercises[state.currentExIdx];
-  if(!state.sessionData[ex.name])state.sessionData[ex.name]={};
-  const w=document.getElementById('w'+s).value;const r=document.getElementById('r'+s).value;
-  const btn=document.getElementById('db'+s);const done=!btn.classList.contains('done');
-  state.sessionData[ex.name]['s'+s]={w:w?parseFloat(w):'',r:r?parseInt(r):'',done};
-  btn.classList.toggle('done',done);btn.textContent=done?'✓':'Log';
-  if(done){resetTimer();startTimer();}
+  const arr=state.liveSets[ex.name]||[];
+  const obj={};
+  arr.forEach((s,i)=>{obj['s'+i]={w:s.w,r:s.r,done:s.done};});
+  state.sessionData[ex.name]=obj;
 }
 
 function nextEx(){
@@ -565,7 +609,6 @@ function showCompleteScreen(){
     '<div class="stat-card"><div class="stat-label">Sets logged</div><div class="stat-val">'+totalSets+'</div></div>'+
     '<div class="stat-card"><div class="stat-label">Avg weight</div><div class="stat-val">'+(weightN?Math.round(weightSum/weightN):'-')+'<span class="stat-unit">'+(weightN?' lbs':'')+'</span></div></div>'+
     '<div class="stat-card"><div class="stat-label">Session</div><div class="stat-val">Day '+day+'</div></div>';
-  // reset feel
   state.completeFeel=null;
   document.querySelectorAll('#feel-row .feel-btn').forEach(b=>b.classList.remove('selected'));
   document.getElementById('complete-notes').value='';
@@ -575,9 +618,7 @@ function showCompleteScreen(){
 
 function selectFeel(n){
   state.completeFeel=n;
-  document.querySelectorAll('#feel-row .feel-btn').forEach((b,i)=>{
-    b.classList.toggle('selected',i+1===n);
-  });
+  document.querySelectorAll('#feel-row .feel-btn').forEach((b,i)=>b.classList.toggle('selected',i+1===n));
 }
 
 function finishAndGoHome(){
@@ -592,7 +633,7 @@ function toggleCue(){
   const open=box.classList.toggle('open');btn.textContent=open?'Hide form cues':'Show form cues';
 }
 
-// TIMER
+// ── TIMER ──
 function setPreset(sec,el){
   document.querySelectorAll('.preset-btn').forEach(b=>b.classList.remove('active-preset'));
   el.classList.add('active-preset');state.timerTarget=sec;resetTimer();
@@ -617,45 +658,124 @@ function startTimer(){
 function toggleTimer(){if(state.timerRunning){resetTimer();}else{startTimer();}}
 function formatTime(s){const a=Math.abs(s);return Math.floor(a/60)+':'+(a%60<10?'0':'')+a%60;}
 
-// BACKLOG / EDIT
+// ── BACKLOG EXERCISE SETS ──
+function getLastWeightsForDay(day){
+  // returns {exName: [{w,r},...]} from most recent session of that day
+  for(const s of sessions){
+    if(s.day===day&&s.exercises&&Object.keys(s.exercises).length>0){
+      const result={};
+      Object.keys(s.exercises).forEach(exName=>{
+        result[exName]=Object.values(s.exercises[exName]).map(d=>({w:d.w||'',r:d.r||''}));
+      });
+      return result;
+    }
+  }
+  return null;
+}
+
+function buildBacklogExercises(day,existingExercises){
+  blSets={};
+  const lastWeights=getLastWeightsForDay(day);
+  const exList=WORKOUTS[day].exercises;
+  exList.forEach(ex=>{
+    const existing=existingExercises?existingExercises[ex.name]:null;
+    const last=lastWeights?lastWeights[ex.name]:null;
+    if(existing){
+      blSets[ex.name]=Object.values(existing).map(d=>({w:d.w||'',r:d.r||''}));
+    } else {
+      const defaultSets=[];
+      for(let i=0;i<ex.sets;i++){
+        defaultSets.push({w:last&&last[i]?last[i].w:(ex.startWeight||''),r:last&&last[i]?last[i].r:''});
+      }
+      blSets[ex.name]=defaultSets;
+    }
+  });
+  renderBacklogExercises(day);
+  document.getElementById('backlog-exercises-wrap').style.display='block';
+}
+
+function renderBacklogExercises(day){
+  const exList=WORKOUTS[day].exercises;
+  let html='';
+  exList.forEach(ex=>{
+    const sets=blSets[ex.name]||[];
+    html+='<div class="bl-ex-block"><div class="bl-ex-name">'+ex.name.charAt(0).toUpperCase()+ex.name.slice(1)+'</div>';
+    html+='<div class="set-col-headers" style="grid-template-columns:28px 1fr 1fr 32px;gap:6px;"><div class="set-col-label">#</div><div class="set-col-label">Weight (lbs)</div><div class="set-col-label">Reps</div><div></div></div>';
+    sets.forEach((s,i)=>{
+      const eid=ex.name.replace(/[^a-z0-9]/gi,'_');
+      html+='<div class="bl-set-row">'+
+        '<div class="bl-set-num">'+(i+1)+'</div>'+
+        '<input class="set-input" type="number" inputmode="decimal" step="2.5" placeholder="lbs" value="'+(s.w!==undefined?s.w:'')+'" id="blw-'+eid+'-'+i+'" style="padding:8px 4px;">'+
+        '<input class="set-input" type="number" inputmode="numeric" placeholder="reps" value="'+(s.r!==undefined?s.r:'')+'" id="blr-'+eid+'-'+i+'" style="padding:8px 4px;">'+
+        '<button class="bl-set-del" onclick="deleteBlSet(\''+ex.name+'\','+i+',\''+day+'\')">×</button>'+
+      '</div>';
+    });
+    html+='<button class="bl-add-set" onclick="addBlSet(\''+ex.name+'\',\''+day+'\')">+ Add set</button>';
+    html+='</div>';
+  });
+  document.getElementById('backlog-exercises-list').innerHTML=html;
+}
+
+function addBlSet(exName,day){
+  const arr=blSets[exName];
+  const last=arr[arr.length-1];
+  arr.push({w:last?last.w:'',r:''});
+  renderBacklogExercises(day);
+}
+
+function deleteBlSet(exName,idx,day){
+  if(blSets[exName].length<=1){alert('You need at least one set.');return;}
+  blSets[exName].splice(idx,1);
+  renderBacklogExercises(day);
+}
+
+function collectBlSets(day){
+  const exList=WORKOUTS[day].exercises;
+  const result={};
+  let totalSets=0;let wSum=0;let wN=0;
+  exList.forEach(ex=>{
+    const eid=ex.name.replace(/[^a-z0-9]/gi,'_');
+    const arr=blSets[ex.name]||[];
+    const obj={};
+    arr.forEach((s,i)=>{
+      const wEl=document.getElementById('blw-'+eid+'-'+i);
+      const rEl=document.getElementById('blr-'+eid+'-'+i);
+      const w=wEl?parseFloat(wEl.value)||'':'';
+      const r=rEl?parseInt(rEl.value)||'':'';
+      obj['s'+i]={w,r,done:true};
+      totalSets++;
+      if(w){wSum+=w;wN++;}
+    });
+    result[ex.name]=obj;
+  });
+  return{exercises:result,sets:totalSets,avgWeight:wN?Math.round(wSum/wN):0};
+}
+
+// ── BACKLOG / EDIT MODAL ──
 function openBacklog(editIdx){
   state.editingIdx=editIdx;
   const isEdit=editIdx!==null&&editIdx!==undefined;
   const s=isEdit?sessions[editIdx]:null;
+  blSets={};
   document.getElementById('backlog-modal-title').textContent=isEdit?'Edit session':'Log a past session';
   document.getElementById('backlog-save-btn').textContent=isEdit?'Save changes':'Save session';
-  document.getElementById('backlog-note-text').style.display=isEdit?'none':'block';
   document.getElementById('backlog-date').value=isEdit?new Date(s.date).toISOString().split('T')[0]:new Date().toISOString().split('T')[0];
   document.getElementById('backlog-duration').value=isEdit?(s.duration||''):'';
-  document.getElementById('backlog-sets').value=isEdit?(s.sets||''):'';
   document.getElementById('backlog-notes').value=isEdit?(s.notes||''):'';
   state.backlogDay=isEdit?s.day:null;
   state.backlogFeel=isEdit?(s.feel||null):null;
   ['a','b','c'].forEach(d=>document.getElementById('bl-'+d).className='day-sel-btn');
   if(isEdit&&s.day)document.getElementById('bl-'+s.day.toLowerCase()).className='day-sel-btn sel-'+s.day.toLowerCase();
-  // restore feel buttons
-  document.querySelectorAll('#backlog-feel-row .feel-btn').forEach((b,i)=>{
-    b.classList.toggle('selected',isEdit&&s.feel===i+1);
-  });
-  // exercise detail editor
-  const exSection=document.getElementById('edit-exercises-section');
-  const exList=document.getElementById('edit-exercises-list');
-  if(isEdit&&s.exercises&&Object.keys(s.exercises).length>0){
-    exSection.style.display='block';
-    let html='';
-    Object.keys(s.exercises).forEach(exName=>{
-      const exData=s.exercises[exName];
-      const setKeys=Object.keys(exData).sort();
-      html+='<div class="edit-ex-block"><div class="edit-ex-name">'+exName+'</div><div class="edit-sets-grid">';
-      setKeys.forEach((k,si)=>{
-        const d=exData[k];
-        const id=exName.replace(/[^a-z0-9]/gi,'_');
-        html+='<div class="set-col"><div class="set-label">Set '+(si+1)+'</div><input class="set-input" type="number" inputmode="decimal" step="2.5" placeholder="lbs" value="'+(d.w||'')+'" id="edit-w-'+id+'-'+si+'"><input class="set-input" type="number" inputmode="numeric" placeholder="reps" value="'+(d.r||'')+'" id="edit-r-'+id+'-'+si+'"></div>';
-      });
-      html+='</div></div>';
-    });
-    exList.innerHTML=html;
-  }else{exSection.style.display='none';exList.innerHTML='';}
+  document.querySelectorAll('#backlog-feel-row .feel-btn').forEach((b,i)=>b.classList.toggle('selected',isEdit&&s.feel===i+1));
+  // show delete zone only when editing
+  document.getElementById('delete-zone').style.display=isEdit?'block':'none';
+  // exercises
+  if(isEdit&&s.day){
+    buildBacklogExercises(s.day,s.exercises&&Object.keys(s.exercises).length>0?s.exercises:null);
+  } else {
+    document.getElementById('backlog-exercises-wrap').style.display='none';
+    document.getElementById('backlog-exercises-list').innerHTML='';
+  }
   document.getElementById('backlog-modal').style.display='flex';
 }
 
@@ -667,6 +787,7 @@ function selectBacklogDay(day){
   state.backlogDay=day;
   ['a','b','c'].forEach(d=>document.getElementById('bl-'+d).className='day-sel-btn');
   document.getElementById('bl-'+day.toLowerCase()).className='day-sel-btn sel-'+day.toLowerCase();
+  buildBacklogExercises(day,null);
 }
 
 function selectBacklogFeel(n){
@@ -677,45 +798,37 @@ function selectBacklogFeel(n){
 function saveBacklog(){
   const dateVal=document.getElementById('backlog-date').value;
   const duration=parseInt(document.getElementById('backlog-duration').value)||0;
-  const sets=parseInt(document.getElementById('backlog-sets').value)||0;
   const notes=document.getElementById('backlog-notes').value.trim();
   if(!dateVal){alert('Please select a date.');return;}
   if(!state.backlogDay){alert('Please select a workout day (A, B, or C).');return;}
   const isEdit=state.editingIdx!==null&&state.editingIdx!==undefined;
+  const{exercises,sets,avgWeight}=collectBlSets(state.backlogDay);
   if(isEdit){
     const s=sessions[state.editingIdx];
     s.date=new Date(dateVal+'T12:00:00').toISOString();
-    s.day=state.backlogDay;s.duration=duration;s.sets=sets;
-    s.feel=state.backlogFeel||null;s.notes=notes;
-    if(s.exercises&&Object.keys(s.exercises).length>0){
-      Object.keys(s.exercises).forEach(exName=>{
-        const exData=s.exercises[exName];
-        const setKeys=Object.keys(exData).sort();
-        const id=exName.replace(/[^a-z0-9]/gi,'_');
-        setKeys.forEach((k,si)=>{
-          const wEl=document.getElementById('edit-w-'+id+'-'+si);
-          const rEl=document.getElementById('edit-r-'+id+'-'+si);
-          if(wEl)exData[k].w=wEl.value?parseFloat(wEl.value):'';
-          if(rEl)exData[k].r=rEl.value?parseInt(rEl.value):'';
-        });
-      });
-      let wS=0,wN=0;
-      for(const e of Object.values(s.exercises))for(const set of Object.values(e)){if(set.w){wS+=set.w;wN++;}}
-      s.avgWeight=wN?Math.round(wS/wN):0;
-    }
-  }else{
-    sessions.unshift({day:state.backlogDay,date:new Date(dateVal+'T12:00:00').toISOString(),duration,sets,avgWeight:0,backlog:true,feel:state.backlogFeel||null,notes,exercises:{}});
+    s.day=state.backlogDay;s.duration=duration;s.sets=sets;s.avgWeight=avgWeight;
+    s.feel=state.backlogFeel||null;s.notes=notes;s.exercises=exercises;
+  } else {
+    sessions.unshift({day:state.backlogDay,date:new Date(dateVal+'T12:00:00').toISOString(),duration,sets,avgWeight,backlog:true,feel:state.backlogFeel||null,notes,exercises});
   }
   sessions.sort((a,b)=>new Date(b.date)-new Date(a.date));
   save();closeBacklog();renderHome();
 }
 
-// DELETE
-function openConfirmDelete(idx){state.pendingDeleteIdx=idx;document.getElementById('confirm-modal').style.display='flex';}
+// ── DELETE ──
+function openConfirmDelete(idx){
+  state.pendingDeleteIdx=idx;
+  document.getElementById('confirm-modal').style.display='flex';
+}
 function closeConfirm(){state.pendingDeleteIdx=null;document.getElementById('confirm-modal').style.display='none';}
-function confirmDelete(){if(state.pendingDeleteIdx!==null){sessions.splice(state.pendingDeleteIdx,1);save();closeConfirm();renderHome();}}
+function confirmDelete(){
+  if(state.pendingDeleteIdx!==null){
+    sessions.splice(state.pendingDeleteIdx,1);
+    save();closeConfirm();closeBacklog();renderHome();
+  }
+}
 
-// PROGRESS
+// ── PROGRESS ──
 function renderProgress(){
   document.getElementById('p-sessions').textContent=sessions.length;
   document.getElementById('p-week').textContent=sessions.filter(s=>new Date(s.date)>new Date(Date.now()-7*86400000)).length;
@@ -734,7 +847,7 @@ function renderProgress(){
     const d=new Date(s.date);
     const tag=s.backlog?' <span class="backlog-tag">(backlogged)</span>':'';
     const note=s.notes?'<div class="history-note">'+s.notes+'</div>':'';
-    return '<div class="history-item"><div class="history-left"><div class="badge badge-'+s.day.toLowerCase()+'">'+s.day+'</div><div style="flex:1;min-width:0;"><div class="history-date">'+feelTag(s)+d.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'})+tag+'</div><div class="history-meta">'+(s.duration||'?')+' min · '+(s.sets||'?')+' sets</div>'+note+'</div></div><div class="history-actions"><button class="icon-btn" onclick="openEdit('+i+')">Edit</button><button class="icon-btn del" onclick="openConfirmDelete('+i+')">Del</button></div></div>';
+    return '<div class="history-item"><div class="history-left"><div class="badge badge-'+s.day.toLowerCase()+'">'+s.day+'</div><div style="flex:1;min-width:0;"><div class="history-date">'+feelTag(s)+d.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'})+tag+'</div><div class="history-meta">'+(s.duration||'?')+' min · '+(s.sets||'?')+' sets</div>'+note+'</div></div><div class="history-actions"><button class="icon-btn" onclick="openEdit('+i+')">Edit</button></div></div>';
   }).join('');
   renderChart();
 }
@@ -747,7 +860,7 @@ function renderChart(){
   for(const s of [...sessions].reverse()){
     const exData=s.exercises?.[exName];
     if(exData){
-      const weights=Object.values(exData).filter(d=>d.done&&d.w).map(d=>d.w);
+      const weights=Object.values(exData).filter(d=>d.w).map(d=>d.w);
       if(weights.length)points.push({date:new Date(s.date),w:Math.round(weights.reduce((a,b)=>a+b,0)/weights.length)});
     }
   }
